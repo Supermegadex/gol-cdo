@@ -1,0 +1,23 @@
+Computer.DO.namespace GOL
+
+GOL.DO.define makeBoard
+  Computer.DO.list $board
+  Computer.DO.loop 10 times
+    Computer.DO.list $row
+    Computer.DO.loop 10 times
+      Computer.DO.push "-" to $row
+    Computer.DO.return
+    Computer.DO.push $row to $board
+  Computer.DO.return
+GOL.DO.return $board
+
+GOL.DO.define randomize $board
+  Computer.DO.loop 100 times
+    Computer.DO.randomInt between 0 and 9 to $randX
+    Computer.DO.randomInt between 0 and 9 to $randY
+    Computer.DO.getItem from $board $randY to $row
+    Computer.DO.setItem $row $randX to "*"
+  Computer.DO.return
+GOL.DO.return $board
+
+Computer.DO.export GOL

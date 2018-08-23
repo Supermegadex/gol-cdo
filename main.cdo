@@ -1,0 +1,5 @@
+Computer.DO.import GOL from "gol.cdo"
+
+GOL.DO.makeBoard to $board
+GOL.DO.randomize $board to $board
+Computer.DO.print $board
