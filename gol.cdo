@@ -12,11 +12,87 @@ GOL.DO.define makeBoard
 GOL.DO.return $board
 
 GOL.DO.define randomize $board
-  Computer.DO.loop 100 times
+  Computer.DO.loop 25 times
     Computer.DO.randomInt between 0 and 9 to $randX
     Computer.DO.randomInt between 0 and 9 to $randY
     Computer.DO.getItem from $board $randY to $row
     Computer.DO.setItem $row $randX to "*"
+  Computer.DO.return
+GOL.DO.return $board
+
+GOL.DO.define printBoard $board
+  Computer.DO.set $str ""
+  Computer.DO.set $y 0
+  Computer.DO.loop 10 times
+    Computer.DO.set $x 0
+    Computer.DO.loop 10 times
+      Computer.DO.getItem from $board $y $x to $cell
+      Computer.DO.set $str "$str$cell"
+      Computer.DO.add $x 1 to $x
+    Computer.DO.return
+    Computer.DO.set $str "$str\n"
+    Computer.DO.add $y 1 to $y
+  Computer.DO.return
+GOL.DO.return $str
+
+GOL.DO.define cellIsAlive $board $x $y
+  Computer.DO.set $result 0
+  Computer.DO.if $x >= 0
+    Computer.DO.if $x < 10
+      Computer.DO.if $y >= 0
+        Computer.DO.if $y < 10
+          Computer.DO.getItem from $board $y $x to $cell
+          Computer.DO.if $cell = "*"
+            Computer.DO.set $result 1
+          Computer.DO.return
+        Computer.DO.return
+      Computer.DO.return
+    Computer.DO.return
+  Computer.DO.return
+GOL.DO.return $result
+
+GOL.DO.define getNumNeighbors $board $x $y
+  Computer.DO.set $numNeighbors 0
+  Computer.DO.list $locations
+  Computer.DO.subtract $x 1 to $lx
+  Computer.DO.subtract $y 1 to $ty
+  Computer.DO.add $x 1 to $rx
+  Computer.DO.add $y 1 to $by
+  Computer.DO.push $lx $ty $x $ty $rx $ty $lx $y $rx $y $lx $by $x $by $rx $by to $locations
+  Computer.DO.loop 8 times
+    Computer.DO.pop from $locations to $curY
+    Computer.DO.pop from $locations to $curX
+    GOL.DO.cellIsAlive $board $curX $curY to $res
+    Computer.DO.if $res = 1
+      Computer.DO.add $numNeighbors 1 to $numNeighbors
+    Computer.DO.return
+  Computer.DO.return
+GOL.DO.return $numNeighbors
+
+GOL.DO.define runStep $board
+  Computer.DO.copyList $board to $copy
+  Computer.DO.set $y 0
+  Computer.DO.loop 10 times
+    Computer.DO.set $x 0
+    Computer.DO.loop 10 times
+      GOL.DO.getNumNeighbors $copy $x $y to $numNeighbors
+      Computer.DO.getItem from $board $y $x to $cell
+      Computer.DO.if $cell = "*"
+        Computer.DO.if $numNeighbors < 2
+          Computer.DO.setItem $board $y $x to "-"
+        Computer.DO.return
+        Computer.DO.if $numNeighbors > 3
+          Computer.DO.setItem $board $y $x to "-"
+        Computer.DO.return
+      Computer.DO.return
+      Computer.DO.if $cell = "-"
+        Computer.DO.if $numNeighbors = 3
+          Computer.DO.setItem $board $y $x to "*"
+        Computer.DO.return
+      Computer.DO.return
+      Computer.DO.add $x 1 to $x
+    Computer.DO.return
+    Computer.DO.add $y 1 to $y
   Computer.DO.return
 GOL.DO.return $board
 

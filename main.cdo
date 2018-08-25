@@ -2,4 +2,11 @@ Computer.DO.import GOL from "gol.cdo"
 
 GOL.DO.makeBoard to $board
 GOL.DO.randomize $board to $board
-Computer.DO.print $board
+GOL.DO.printBoard $board to $out
+Computer.DO.print $out
+Computer.DO.loop 100 times
+  Computer.DO.ask "" to $null
+  GOL.DO.runStep $board
+  GOL.DO.printBoard $board to $out
+  Computer.DO.print $out
+Computer.DO.return
